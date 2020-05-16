@@ -22,6 +22,12 @@ class CreateTasksTable extends Migration
                 ->enum('status', TaskStatusInterface::STATUS)
                 ->default(TaskStatusInterface::TASK_STATUS_VIEW)
                 ->index();
+            $table->bigInteger('user')->unsigned()->default(1);
+            $table
+                ->foreign('user')
+                ->references('user_id')
+                ->on('users')
+                ->cascadeOnDelete();
             $table->timestamps();
         });
     }
