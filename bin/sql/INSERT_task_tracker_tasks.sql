@@ -1,0 +1,9 @@
+INSERT INTO tasks (id, title, description, status, user, created_at, updated_at) VALUES (1, 'Mr.', 'Hatter. He came in with a trumpet in one hand.', 'View', 1, '2020-05-16 13:21:38', '2020-05-16 13:21:38');
+INSERT INTO tasks (id, title, description, status, user, created_at, updated_at) VALUES (2, 'Dr.', 'I don''t keep the same solemn tone, only changing.', 'In Progress', 1, '2020-05-16 13:21:38', '2020-05-16 13:21:38');
+INSERT INTO tasks (id, title, description, status, user, created_at, updated_at) VALUES (3, 'Prof.', 'VERY wide, but she did not like to be a.', 'Done', 1, '2020-05-16 13:21:38', '2020-05-16 13:21:38');
+INSERT INTO tasks (id, title, description, status, user, created_at, updated_at) VALUES (4, 'Ms.', 'Mock Turtle drew a long silence after this, and.', 'In Progress', 1, '2020-05-16 13:21:38', '2020-05-16 14:52:04');
+INSERT INTO tasks (id, title, description, status, user, created_at, updated_at) VALUES (5, 'Ms.', 'Ugh, Serpent!'' ''But I''m not used to do:-- ''How.', 'View', 1, '2020-05-16 13:21:38', '2020-05-16 13:21:38');
+INSERT INTO tasks (id, title, description, status, user, created_at, updated_at) VALUES (6, 'Miss', 'Her chin was pressed so closely against her.', 'In Progress', 1, '2020-05-16 13:21:38', '2020-05-16 13:21:38');
+INSERT INTO tasks (id, title, description, status, user, created_at, updated_at) VALUES (7, 'Dr.', 'And beat him when he finds out who was passing.', 'View', 1, '2020-05-16 13:21:38', '2020-05-16 13:21:38');
+INSERT INTO tasks (id, title, description, status, user, created_at, updated_at) VALUES (8, 'Mr.', 'Yet you finished the first question, you know.''.', 'In Progress', 1, '2020-05-16 13:21:38', '2020-05-16 13:21:38');
+INSERT INTO tasks (id, title, description, status, user, created_at, updated_at) VALUES (9, 'Mrs.', 'Alice heard the Queen''s ears--'' the Rabbit.', 'In Progress', 1, '2020-05-16 13:21:38', '2020-05-16 13:21:38');
