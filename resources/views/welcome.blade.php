@@ -85,6 +85,7 @@
                 </div>
 
                 <div class="links">
+                    <a href="https://www.notion.so/Back-End-Task-Tracker-4d0ad2be40aa4b7b8732e7c0b60e7fec">Тестовое задание</a>
                     <a href="https://github.com/splaa/task-traker/blob/master/README.md">Docs</a>
                     <a href="https://github.com/splaa/task-traker">GitHub</a>
                     <a href="https://github.com/splaa/task-traker/blob/master/bin/http/heroku-tasks.http">API TASK</a>
