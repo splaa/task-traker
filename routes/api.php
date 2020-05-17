@@ -1,5 +1,6 @@
 <?php
 
+use App\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,7 +24,23 @@ Route::namespace('Api')->group(static function () {
     Route::apiResource('tasks', 'TaskController');
     Route::apiResource('users', 'UsersController');
 
-    Route::match(['put', 'patch'], 'tasks/{task}/status/{status_name}','TaskController@updateStatus',)
-    ->name('tasks.update.status');
+    Route::match(['put', 'patch'], 'tasks/{task}/status/{status_name}', 'TaskController@updateStatus')
+        ->name('tasks.update.status');
+
+
+    Route::get('tasks/filter/status', static function () {
+        return response(Task::all()->sortBy('status'), 200);
+    });
+    Route::get('tasks/filter/status/desc', static function () {
+        return response(Task::all()->sortByDesc('status'), 200);
+    });
+
+    Route::get('tasks/filter/id', static function () {
+        return response(Task::all()->sortBy('id'), 200);
+    });
+    Route::get('tasks/filter/id/desc', static function () {
+        return response(Task::all()->sortByDesc('id'), 200);
+    });
+    Route::match(['put', 'patch'], 'tasks/{task}/user/{user}', 'TaskController@changeUserToTask');
 
 });

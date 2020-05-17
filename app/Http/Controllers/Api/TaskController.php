@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Infrastructure\Interfaces\Tasks\TaskStatusInterface;
 use App\Task;
+use App\User;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -70,7 +71,8 @@ class TaskController extends Controller
      */
     public function destroy(Task $task): Response
     {
-        return response($task->delete(), 204);
+        $task->delete();
+        return response(null, 204);
     }
 
 
@@ -100,4 +102,12 @@ class TaskController extends Controller
         }
         return response($task, 200);
     }
+
+    public function changeUserToTask(Task $task, User $user)
+    {
+        $task->user = $user->user_id;
+        $task->save();
+        return response($task, 200);
+    }
+
 }

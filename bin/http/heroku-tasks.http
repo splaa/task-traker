@@ -1,0 +1,66 @@
+
+###
+#   -=Создание Создание задачи =-
+###
+
+POST http://task-traker.herokuapp.com/api/tasks
+Content-Type: application/json
+
+{
+    "title": "New Task",
+    "description": "New task description ",
+    "status": "in Progress"
+}
+
+###
+#   -=Редактирование задачи =-
+###
+
+PUT http://task-traker.herokuapp.com/api/tasks/4
+Content-Type: application/json
+
+{
+    "title": "New My Title"
+}
+
+###
+#   -=Изменить статус задачи =-
+###
+
+PUT http://task-traker.herokuapp.com/api/tasks/4/status/View
+
+#PUT http://task-traker.herokuapp.com/api/tasks/4/status/InProgress
+
+#PUT http://task-traker.herokuapp.com/api/tasks/4/status/Done
+
+###
+#   -=Удаление задачи =-
+###
+DELETE http://task-traker.herokuapp.com/api/tasks/21
+
+
+###
+#   -=Получение задачи =-
+###
+GET http://task-traker.herokuapp.com/api/tasks/1
+Accept: application/json
+
+###
+#   -=Получение списка задач =-
+###
+
+GET http://task-traker.herokuapp.com/api/tasks
+
+
+###
+#   -=Получение отфильтрованого списка задач по статусу =-
+###
+
+GET http://task-traker.herokuapp.com/api/tasks/filter/status
+###
+#   -=Получение отфильтрованого списка задач по id =-
+###
+
+GET http://task-traker.herokuapp.com/api/tasks/filter/id
+
+
