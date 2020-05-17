@@ -36,11 +36,11 @@ PUT http://task-traker.herokuapp.com/api/tasks/4/status/View
 ###
 #   -=Удаление задачи =-
 ###
-DELETE http://task-traker.herokuapp.com/api/tasks/21
+DELETE http://task-traker.herokuapp.com/api/tasks/11
 
 
 ###
-#   -=Получение задачи =-
+#   -=Получение одной задачи =-
 ###
 GET http://task-traker.herokuapp.com/api/tasks/1
 Accept: application/json
@@ -57,6 +57,14 @@ GET http://task-traker.herokuapp.com/api/tasks
 ###
 
 GET http://task-traker.herokuapp.com/api/tasks/filter/status
+
+###
+#   -=Получение отфильтрованого списка задач по статусу (в порядке убывания) =-
+###
+
+GET http://task-traker.herokuapp.com/api/tasks/filter/status/desc
+
+
 ###
 #   -=Получение отфильтрованого списка задач по id =-
 ###
@@ -64,3 +72,14 @@ GET http://task-traker.herokuapp.com/api/tasks/filter/status
 GET http://task-traker.herokuapp.com/api/tasks/filter/id
 
 
+###
+#   -=Получение отфильтрованого списка задач по id (в порядке убывания) =-
+###
+
+GET http://task-traker.herokuapp.com/api/tasks/filter/id/desc
+
+###
+#   -=Изменить пользователя на которого назначена задача =-
+###
+
+PUT http://task-traker.herokuapp.com/api/tasks/1/user/1

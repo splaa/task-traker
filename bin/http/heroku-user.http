@@ -1,0 +1,47 @@
+
+###
+#   -=Создание Создание пользователя =-
+###
+
+POST http://task-traker.herokuapp.com/api/users
+Content-Type: application/json
+
+{
+    "first_name": "test2",
+    "last_name": "adminov2",
+    "email": "test2@site.com",
+    "password": "test2",
+    "email_verified_at": "2020-05-16 13:21:37",
+    "remember_token": "kjgoiwoij"
+}
+
+###
+#   -=Редактирование пользователя =-
+###
+
+PUT http://task-traker.herokuapp.com/api/users/101
+Content-Type: application/json
+
+{
+    "first_name": "Andrii",
+    "last_name": "Lavryniuk"
+}
+
+###
+#   -=Удаление пользователя =-
+###
+DELETE http://task-traker.herokuapp.com/api/users/101
+
+
+###
+#   -=Получение одного пользователя =-
+###
+GET http://task-traker.herokuapp.com/api/users/1
+Accept: application/json
+
+###
+#   -=Получение списка  всех пользователей =-
+###
+
+GET http://task-traker.herokuapp.com/api/tasks
+
