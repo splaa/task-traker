@@ -7,6 +7,7 @@ use App\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Str;
 
 class UsersController extends Controller
 {
@@ -28,7 +29,11 @@ class UsersController extends Controller
      */
     public function store(Request $request): Response
     {
-        return response(User::create($request->all()), 201);
+
+     $user = User::create($request->all());
+
+
+        return response($user, 201);
     }
 
     /**
