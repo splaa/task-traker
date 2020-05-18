@@ -81,7 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel Task Tracker
+                    <a href="tasks">Laravel Task Tracker</a>
                 </div>
 
                 <div class="links">
