@@ -43,5 +43,5 @@ Accept: application/json
 #   -=Получение списка  всех пользователей =-
 ###
 
-GET http://task-traker.herokuapp.com/api/tasks
+GET http://task-traker.herokuapp.com/api/users
 
