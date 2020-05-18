@@ -67360,22 +67360,19 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 function App() {
-  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0___default.a.useState([{
-    id: 1,
-    completed: false,
-    title: 'Купить хлеб'
-  }, {
-    id: 2,
-    completed: true,
-    title: 'Купить масло'
-  }, {
-    id: 3,
-    completed: false,
-    title: 'Купить молоко'
-  }]),
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0___default.a.useState([]),
       _React$useState2 = _slicedToArray(_React$useState, 2),
       todos = _React$useState2[0],
       setTodos = _React$useState2[1];
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    fetch('http://task-traker.herokuapp.com/api/tasks/filter/id').then(function (response) {
+      return response.json();
+    }).then(function (todos) {
+      console.log(todos);
+      setTodos(todos);
+    });
+  }, []);
 
   function toggleTodo(id) {
     // console.log('### todo id: ', id);
@@ -67422,7 +67419,7 @@ function App() {
     todos: todos,
     onToggle: toggleTodo,
     removeTodo: removeTodo
-  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u0412\u0441\u0451  \u0437\u0430\u0434\u0430\u0447\u0438 \u0432\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u044B!!!"))))));
+  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u0412\u0441\u0451 \u0437\u0430\u0434\u0430\u0447\u0438 \u0432\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u044B!!!"))))));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (App);

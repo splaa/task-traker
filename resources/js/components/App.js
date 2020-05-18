@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import TodoList from "./Todo/TodoList";
 
@@ -7,11 +7,16 @@ import './App.css';
 import AddTodo from "./Todo/add-todo/AddTodo";
 
 function App() {
-    const [todos, setTodos] = React.useState([
-        {id: 1, completed: false, title: 'Купить хлеб'},
-        {id: 2, completed: true, title: 'Купить масло'},
-        {id: 3, completed: false, title: 'Купить молоко'},
-    ]);
+    const [todos, setTodos] = React.useState([]);
+
+    useEffect(() => {
+        fetch('http://task-traker.herokuapp.com/api/tasks/filter/id')
+            .then(response => response.json())
+            .then(todos => {
+                console.log(todos);
+                setTodos(todos);
+            })
+    }, [])
 
     function toggleTodo(id) {
         // console.log('### todo id: ', id);
@@ -48,7 +53,7 @@ function App() {
                         <div className="card-body">
                             {todos.length ?
                                 <TodoList todos={todos} onToggle={toggleTodo} removeTodo={removeTodo}/>
-                                : <p>Всё  задачи выполнены!!!</p>
+                                : <p>Всё задачи выполнены!!!</p>
                             }
                         </div>
                     </div>
