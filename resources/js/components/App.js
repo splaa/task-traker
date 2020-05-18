@@ -4,6 +4,7 @@ import TodoList from "./Todo/TodoList";
 
 
 import './App.css';
+import AddTodo from "./Todo/add-todo/AddTodo";
 
 function App() {
     const [todos, setTodos] = React.useState([
@@ -26,6 +27,14 @@ function App() {
         setTodos(todos.filter(todo => todo.id !== id))
     }
 
+    function addTodo(title) {
+        setTodos(todos.concat([{
+            title,
+            id: Date.now(),
+            completed: false
+        }]))
+    }
+
     return (
         <div className="container wrapper">
             <div className="row justify-content-center">
@@ -33,6 +42,9 @@ function App() {
                     <div className="card">
                         <div className="card-header"><h1>Task Tracker</h1></div>
 
+                        <div className="card-body">
+                            <AddTodo onCreate={addTodo}/>
+                        </div>
                         <div className="card-body">
                             {todos.length ?
                                 <TodoList todos={todos} onToggle={toggleTodo} removeTodo={removeTodo}/>
