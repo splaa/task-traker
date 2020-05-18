@@ -38,6 +38,7 @@ class AddTodo extends Component {
 
         if (this.state.value.trim()) {
             this.props.onCreate(this.state.value);
+            this.setState({value: ''});
         }
     }
 
