@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import TodoList from "./Todo/TodoList";
+import Modal from "./modal/Modal";
+import './App.css';
 
 import Loader from "./loader/Loader";
-import './App.css';
-import Modal from "./modal/Modal";
 
 
 const AddTodo = React.lazy(() => new Promise(resolve => {
