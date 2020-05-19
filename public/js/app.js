@@ -1,6 +1,50 @@
 /******/ (function(modules) { // webpackBootstrap
+/******/ 	// install a JSONP callback for chunk loading
+/******/ 	function webpackJsonpCallback(data) {
+/******/ 		var chunkIds = data[0];
+/******/ 		var moreModules = data[1];
+/******/
+/******/
+/******/ 		// add "moreModules" to the modules object,
+/******/ 		// then flag all "chunkIds" as loaded and fire callback
+/******/ 		var moduleId, chunkId, i = 0, resolves = [];
+/******/ 		for(;i < chunkIds.length; i++) {
+/******/ 			chunkId = chunkIds[i];
+/******/ 			if(Object.prototype.hasOwnProperty.call(installedChunks, chunkId) && installedChunks[chunkId]) {
+/******/ 				resolves.push(installedChunks[chunkId][0]);
+/******/ 			}
+/******/ 			installedChunks[chunkId] = 0;
+/******/ 		}
+/******/ 		for(moduleId in moreModules) {
+/******/ 			if(Object.prototype.hasOwnProperty.call(moreModules, moduleId)) {
+/******/ 				modules[moduleId] = moreModules[moduleId];
+/******/ 			}
+/******/ 		}
+/******/ 		if(parentJsonpFunction) parentJsonpFunction(data);
+/******/
+/******/ 		while(resolves.length) {
+/******/ 			resolves.shift()();
+/******/ 		}
+/******/
+/******/ 	};
+/******/
+/******/
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
+/******/
+/******/ 	// object to store loaded and loading chunks
+/******/ 	// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 	// Promise = chunk loading, 0 = chunk loaded
+/******/ 	var installedChunks = {
+/******/ 		"/js/app": 0
+/******/ 	};
+/******/
+/******/
+/******/
+/******/ 	// script path function
+/******/ 	function jsonpScriptSrc(chunkId) {
+/******/ 		return __webpack_require__.p + "" + ({}[chunkId]||chunkId) + ".js"
+/******/ 	}
 /******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
@@ -26,6 +70,67 @@
 /******/ 		return module.exports;
 /******/ 	}
 /******/
+/******/ 	// This file contains only the entry chunk.
+/******/ 	// The chunk loading function for additional chunks
+/******/ 	__webpack_require__.e = function requireEnsure(chunkId) {
+/******/ 		var promises = [];
+/******/
+/******/
+/******/ 		// JSONP chunk loading for javascript
+/******/
+/******/ 		var installedChunkData = installedChunks[chunkId];
+/******/ 		if(installedChunkData !== 0) { // 0 means "already installed".
+/******/
+/******/ 			// a Promise means "currently loading".
+/******/ 			if(installedChunkData) {
+/******/ 				promises.push(installedChunkData[2]);
+/******/ 			} else {
+/******/ 				// setup Promise in chunk cache
+/******/ 				var promise = new Promise(function(resolve, reject) {
+/******/ 					installedChunkData = installedChunks[chunkId] = [resolve, reject];
+/******/ 				});
+/******/ 				promises.push(installedChunkData[2] = promise);
+/******/
+/******/ 				// start chunk loading
+/******/ 				var script = document.createElement('script');
+/******/ 				var onScriptComplete;
+/******/
+/******/ 				script.charset = 'utf-8';
+/******/ 				script.timeout = 120;
+/******/ 				if (__webpack_require__.nc) {
+/******/ 					script.setAttribute("nonce", __webpack_require__.nc);
+/******/ 				}
+/******/ 				script.src = jsonpScriptSrc(chunkId);
+/******/
+/******/ 				// create error before stack unwound to get useful stacktrace later
+/******/ 				var error = new Error();
+/******/ 				onScriptComplete = function (event) {
+/******/ 					// avoid mem leaks in IE.
+/******/ 					script.onerror = script.onload = null;
+/******/ 					clearTimeout(timeout);
+/******/ 					var chunk = installedChunks[chunkId];
+/******/ 					if(chunk !== 0) {
+/******/ 						if(chunk) {
+/******/ 							var errorType = event && (event.type === 'load' ? 'missing' : event.type);
+/******/ 							var realSrc = event && event.target && event.target.src;
+/******/ 							error.message = 'Loading chunk ' + chunkId + ' failed.\n(' + errorType + ': ' + realSrc + ')';
+/******/ 							error.name = 'ChunkLoadError';
+/******/ 							error.type = errorType;
+/******/ 							error.request = realSrc;
+/******/ 							chunk[1](error);
+/******/ 						}
+/******/ 						installedChunks[chunkId] = undefined;
+/******/ 					}
+/******/ 				};
+/******/ 				var timeout = setTimeout(function(){
+/******/ 					onScriptComplete({ type: 'timeout', target: script });
+/******/ 				}, 120000);
+/******/ 				script.onerror = script.onload = onScriptComplete;
+/******/ 				document.head.appendChild(script);
+/******/ 			}
+/******/ 		}
+/******/ 		return Promise.all(promises);
+/******/ 	};
 /******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
@@ -78,6 +183,16 @@
 /******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "/";
+/******/
+/******/ 	// on error function for async loading
+/******/ 	__webpack_require__.oe = function(err) { console.error(err); throw err; };
+/******/
+/******/ 	var jsonpArray = window["webpackJsonp"] = window["webpackJsonp"] || [];
+/******/ 	var oldJsonpFunction = jsonpArray.push.bind(jsonpArray);
+/******/ 	jsonpArray.push = webpackJsonpCallback;
+/******/ 	jsonpArray = jsonpArray.slice();
+/******/ 	for(var i = 0; i < jsonpArray.length; i++) webpackJsonpCallback(jsonpArray[i]);
+/******/ 	var parentJsonpFunction = oldJsonpFunction;
 /******/
 /******/
 /******/ 	// Load entry module and return exports
@@ -6341,7 +6456,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".wrapper {\n    padding-top: 5rem;\n    margin: 0 auto;\n    width: 600px;\n}\n.rm {\n    background: red;\n    border-radius: 50%;\n    color: white;\n    border: none;\n}\n.done{\n    text-decoration: line-through;\n}\n", ""]);
+exports.push([module.i, ".wrapper {\n    padding-top: 5rem;\n    margin: 0 auto;\n    width: 600px;\n}\n.rm {\n    background: red;\n    border-radius: 50%;\n    color: white;\n    border: none;\n}\n.done{\n    text-decoration: line-through;\n}\n\n.lds-spinner {\n    color: official;\n    display: inline-block;\n    position: relative;\n    width: 80px;\n    height: 80px;\n}\n.lds-spinner div {\n    transform-origin: 40px 40px;\n    -webkit-animation: lds-spinner 1.2s linear infinite;\n            animation: lds-spinner 1.2s linear infinite;\n}\n.lds-spinner div:after {\n    content: \" \";\n    display: block;\n    position: absolute;\n    top: 3px;\n    left: 37px;\n    width: 6px;\n    height: 18px;\n    border-radius: 20%;\n    background: #fff;\n}\n.lds-spinner div:nth-child(1) {\n    transform: rotate(0deg);\n    -webkit-animation-delay: -1.1s;\n            animation-delay: -1.1s;\n}\n.lds-spinner div:nth-child(2) {\n    transform: rotate(30deg);\n    -webkit-animation-delay: -1s;\n            animation-delay: -1s;\n}\n.lds-spinner div:nth-child(3) {\n    transform: rotate(60deg);\n    -webkit-animation-delay: -0.9s;\n            animation-delay: -0.9s;\n}\n.lds-spinner div:nth-child(4) {\n    transform: rotate(90deg);\n    -webkit-animation-delay: -0.8s;\n            animation-delay: -0.8s;\n}\n.lds-spinner div:nth-child(5) {\n    transform: rotate(120deg);\n    -webkit-animation-delay: -0.7s;\n            animation-delay: -0.7s;\n}\n.lds-spinner div:nth-child(6) {\n    transform: rotate(150deg);\n    -webkit-animation-delay: -0.6s;\n            animation-delay: -0.6s;\n}\n.lds-spinner div:nth-child(7) {\n    transform: rotate(180deg);\n    -webkit-animation-delay: -0.5s;\n            animation-delay: -0.5s;\n}\n.lds-spinner div:nth-child(8) {\n    transform: rotate(210deg);\n    -webkit-animation-delay: -0.4s;\n            animation-delay: -0.4s;\n}\n.lds-spinner div:nth-child(9) {\n    transform: rotate(240deg);\n    -webkit-animation-delay: -0.3s;\n            animation-delay: -0.3s;\n}\n.lds-spinner div:nth-child(10) {\n    transform: rotate(270deg);\n    -webkit-animation-delay: -0.2s;\n            animation-delay: -0.2s;\n}\n.lds-spinner div:nth-child(11) {\n    transform: rotate(300deg);\n    -webkit-animation-delay: -0.1s;\n            animation-delay: -0.1s;\n}\n.lds-spinner div:nth-child(12) {\n    transform: rotate(330deg);\n    -webkit-animation-delay: 0s;\n            animation-delay: 0s;\n}\n@-webkit-keyframes lds-spinner {\n    0% {\n        opacity: 1;\n    }\n    100% {\n        opacity: 0;\n    }\n}\n@keyframes lds-spinner {\n    0% {\n        opacity: 1;\n    }\n    100% {\n        opacity: 0;\n    }\n}\n", ""]);
 
 // exports
 
@@ -6380,6 +6495,25 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 // module
 exports.push([module.i, "", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./resources/js/components/loader/Loader.css":
+/*!***********************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/postcss-loader/src??ref--6-2!./resources/js/components/loader/Loader.css ***!
+  \***********************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".lds-spinner {\n    color: blue;\n    display: inline-block;\n    position: relative;\n    width: 80px;\n    height: 80px;\n}\n.lds-spinner div {\n    transform-origin: 40px 40px;\n    -webkit-animation: lds-spinner 1.2s linear infinite;\n            animation: lds-spinner 1.2s linear infinite;\n}\n.lds-spinner div:after {\n    content: \" \";\n    display: block;\n    position: absolute;\n    top: 3px;\n    left: 37px;\n    width: 6px;\n    height: 18px;\n    border-radius: 20%;\n    background: chartreuse;\n}\n.lds-spinner div:nth-child(1) {\n    transform: rotate(0deg);\n    -webkit-animation-delay: -1.1s;\n            animation-delay: -1.1s;\n}\n.lds-spinner div:nth-child(2) {\n    transform: rotate(30deg);\n    -webkit-animation-delay: -1s;\n            animation-delay: -1s;\n}\n.lds-spinner div:nth-child(3) {\n    transform: rotate(60deg);\n    -webkit-animation-delay: -0.9s;\n            animation-delay: -0.9s;\n}\n.lds-spinner div:nth-child(4) {\n    transform: rotate(90deg);\n    -webkit-animation-delay: -0.8s;\n            animation-delay: -0.8s;\n}\n.lds-spinner div:nth-child(5) {\n    transform: rotate(120deg);\n    -webkit-animation-delay: -0.7s;\n            animation-delay: -0.7s;\n}\n.lds-spinner div:nth-child(6) {\n    transform: rotate(150deg);\n    -webkit-animation-delay: -0.6s;\n            animation-delay: -0.6s;\n}\n.lds-spinner div:nth-child(7) {\n    transform: rotate(180deg);\n    -webkit-animation-delay: -0.5s;\n            animation-delay: -0.5s;\n}\n.lds-spinner div:nth-child(8) {\n    transform: rotate(210deg);\n    -webkit-animation-delay: -0.4s;\n            animation-delay: -0.4s;\n}\n.lds-spinner div:nth-child(9) {\n    transform: rotate(240deg);\n    -webkit-animation-delay: -0.3s;\n            animation-delay: -0.3s;\n}\n.lds-spinner div:nth-child(10) {\n    transform: rotate(270deg);\n    -webkit-animation-delay: -0.2s;\n            animation-delay: -0.2s;\n}\n.lds-spinner div:nth-child(11) {\n    transform: rotate(300deg);\n    -webkit-animation-delay: -0.1s;\n            animation-delay: -0.1s;\n}\n.lds-spinner div:nth-child(12) {\n    transform: rotate(330deg);\n    -webkit-animation-delay: 0s;\n            animation-delay: 0s;\n}\n@-webkit-keyframes lds-spinner {\n    0% {\n        opacity: 1;\n    }\n    100% {\n        opacity: 0;\n    }\n}\n@keyframes lds-spinner {\n    0% {\n        opacity: 1;\n    }\n    100% {\n        opacity: 0;\n    }\n}\n", ""]);
 
 // exports
 
@@ -67338,9 +67472,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Todo_TodoList__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Todo/TodoList */ "./resources/js/components/Todo/TodoList.js");
-/* harmony import */ var _App_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./App.css */ "./resources/js/components/App.css");
-/* harmony import */ var _App_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_App_css__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _Todo_add_todo_AddTodo__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Todo/add-todo/AddTodo */ "./resources/js/components/Todo/add-todo/AddTodo.js");
+/* harmony import */ var _loader_Loader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./loader/Loader */ "./resources/js/components/loader/Loader.js");
+/* harmony import */ var _App_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./App.css */ "./resources/js/components/App.css");
+/* harmony import */ var _App_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_App_css__WEBPACK_IMPORTED_MODULE_4__);
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -67358,6 +67492,13 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+var AddTodo = react__WEBPACK_IMPORTED_MODULE_0___default.a.lazy(function () {
+  return new Promise(function (resolve) {
+    setTimeout(function () {
+      resolve(__webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ./Todo/add-todo/AddTodo */ "./resources/js/components/Todo/add-todo/AddTodo.js")));
+    }, 3000);
+  });
+});
 
 function App() {
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0___default.a.useState([]),
@@ -67365,12 +67506,19 @@ function App() {
       todos = _React$useState2[0],
       setTodos = _React$useState2[1];
 
+  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0___default.a.useState(true),
+      _React$useState4 = _slicedToArray(_React$useState3, 2),
+      loading = _React$useState4[0],
+      setLoading = _React$useState4[1];
+
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     fetch('http://task-traker.herokuapp.com/api/tasks/filter/id').then(function (response) {
       return response.json();
     }).then(function (todos) {
-      console.log(todos);
-      setTodos(todos);
+      setTimeout(function () {
+        setTodos(todos);
+        setLoading(false);
+      }, 2000);
     });
   }, []);
 
@@ -67411,15 +67559,17 @@ function App() {
     className: "card-header"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Task Tracker")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "card-body"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Todo_add_todo_AddTodo__WEBPACK_IMPORTED_MODULE_4__["default"], {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Suspense, {
+    fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Loading...")
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(AddTodo, {
     onCreate: addTodo
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "card-body"
-  }, todos.length ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Todo_TodoList__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, loading && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_loader_Loader__WEBPACK_IMPORTED_MODULE_3__["default"], null), todos.length ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Todo_TodoList__WEBPACK_IMPORTED_MODULE_2__["default"], {
     todos: todos,
     onToggle: toggleTodo,
     removeTodo: removeTodo
-  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u0412\u0441\u0451 \u0437\u0430\u0434\u0430\u0447\u0438 \u0432\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u044B!!!"))))));
+  }) : loading ? null : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u0412\u0441\u0451 \u0437\u0430\u0434\u0430\u0447\u0438 \u0432\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u044B!!!"))))));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (App);
@@ -67550,108 +67700,6 @@ TodoList.propTypes = {
   onToggle: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func.isRequired
 };
 /* harmony default export */ __webpack_exports__["default"] = (TodoList);
-
-/***/ }),
-
-/***/ "./resources/js/components/Todo/add-todo/AddTodo.js":
-/*!**********************************************************!*\
-  !*** ./resources/js/components/Todo/add-todo/AddTodo.js ***!
-  \**********************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function () { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-
-
-
-var AddTodo = /*#__PURE__*/function (_Component) {
-  _inherits(AddTodo, _Component);
-
-  var _super = _createSuper(AddTodo);
-
-  function AddTodo(props) {
-    var _this;
-
-    _classCallCheck(this, AddTodo);
-
-    _this = _super.call(this, props);
-    _this.state = {
-      value: ''
-    };
-    _this.submitHandler = _this.submitHandler.bind(_assertThisInitialized(_this));
-    _this.addTodo = _this.addTodo.bind(_assertThisInitialized(_this));
-    return _this;
-  }
-
-  _createClass(AddTodo, [{
-    key: "render",
-    value: function render() {
-      var onCreate = this.props.onCreate;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
-        onSubmit: this.submitHandler
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        value: this.state.value,
-        onChange: this.addTodo
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "submit"
-      }, "Add todo")));
-    }
-  }, {
-    key: "addTodo",
-    value: function addTodo(event) {
-      this.setState({
-        value: event.target.value
-      });
-    }
-  }, {
-    key: "submitHandler",
-    value: function submitHandler(event) {
-      event.preventDefault();
-
-      if (this.state.value.trim()) {
-        this.props.onCreate(this.state.value);
-        this.setState({
-          value: ''
-        });
-      }
-    }
-  }]);
-
-  return AddTodo;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
-
-AddTodo.propTypes = {
-  onCreate: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func.isRequired
-};
-/* harmony default export */ __webpack_exports__["default"] = (AddTodo);
 
 /***/ }),
 
@@ -67793,6 +67841,108 @@ TodoItem.propTypes = {
   onChange: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func.isRequired
 };
 /* harmony default export */ __webpack_exports__["default"] = (TodoItem);
+
+/***/ }),
+
+/***/ "./resources/js/components/loader/Loader.css":
+/*!***************************************************!*\
+  !*** ./resources/js/components/loader/Loader.css ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/postcss-loader/src??ref--6-2!./Loader.css */ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./resources/js/components/loader/Loader.css");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./resources/js/components/loader/Loader.js":
+/*!**************************************************!*\
+  !*** ./resources/js/components/loader/Loader.js ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Loader_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Loader.css */ "./resources/js/components/loader/Loader.css");
+/* harmony import */ var _Loader_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_Loader_css__WEBPACK_IMPORTED_MODULE_1__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function () { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+
+
+
+var Loader = /*#__PURE__*/function (_Component) {
+  _inherits(Loader, _Component);
+
+  var _super = _createSuper(Loader);
+
+  function Loader() {
+    _classCallCheck(this, Loader);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(Loader, [{
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "loader-load",
+        style: {
+          display: 'flex',
+          justifyContent: 'center',
+          margin: '.5rem'
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Loader")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "lds-spinner"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null)));
+    }
+  }]);
+
+  return Loader;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Loader);
 
 /***/ }),
 
