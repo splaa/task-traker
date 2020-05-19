@@ -4,6 +4,7 @@ import TodoList from "./Todo/TodoList";
 
 import Loader from "./loader/Loader";
 import './App.css';
+import Modal from "./modal/Modal";
 
 
 const AddTodo = React.lazy(() => new Promise(resolve => {
@@ -56,7 +57,10 @@ function App() {
             <div className="row justify-content-center">
                 <div className="col-md-8">
                     <div className="card">
-                        <div className="card-header"><h1>Task Tracker</h1></div>
+                        <div className="card-header">
+                            <h1>Task Tracker</h1>
+                            <Modal/>
+                        </div>
 
                         <div className="card-body">
                             <React.Suspense fallback={<p>Loading...</p>}>
