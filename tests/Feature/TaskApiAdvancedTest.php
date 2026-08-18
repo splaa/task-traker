@@ -31,7 +31,7 @@ class TaskApiAdvancedTest extends TestCase
         $response->assertStatus(200)->assertJson([]);
     }
 
-public function test_create_task_with_minimal_data(): void
+    public function test_create_task_with_minimal_data(): void
     {
         $response = $this->postJson('/api/tasks', [
             'title' => 'Minimal Task',
