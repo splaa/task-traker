@@ -18,8 +18,7 @@ class CreateTasksTable extends Migration
             $table->id();
             $table->string('title', 100);
             $table->string('description');
-            $table
-                ->enum('status', TaskStatusInterface::STATUS)
+            $table->string('status', 20)
                 ->default(TaskStatusInterface::TASK_STATUS_VIEW)
                 ->index();
             $table->bigInteger('user')->unsigned()->default(1);

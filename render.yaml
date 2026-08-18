@@ -3,21 +3,15 @@ services:
     name: task-traker
     region: frankfurt
     plan: free
-    buildCommand: composer install --no-dev --optimize-autoloader
-    startCommand: vendor/bin/heroku-php-apache2 public/
     envVars:
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
         value: false
-      - key: APP_KEY
-        generateValue: true
       - key: LOG_CHANNEL
         value: errorlog
       - key: DB_CONNECTION
-        fromDatabase:
-          name: task-traker-db
-          property: connection
+        value: pgsql
       - key: DB_HOST
         fromDatabase:
           name: task-traker-db

@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     libpq-dev \
     libonig-dev \
-    && docker-php-ext-install pdo pdo_mysql mbstring
+    && docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -30,7 +30,7 @@ COPY docker/apache.conf /etc/apache/sites-available/000-default.conf
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# Build frontend assets
+# Build frontend assets (only if package.json changed)
 RUN apt-get install -y nodejs npm \
     && npm ci \
     && npm run production \
