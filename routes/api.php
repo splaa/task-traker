@@ -24,7 +24,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::apiResource('tasks', TaskController::class);
 Route::apiResource('users', UsersController::class);
 
-Route::match(['put', 'patch'], 'tasks/{task}/status/{status_name}', [TaskController::class, 'updateStatus'])
+Route::match(['put', 'patch'], 'tasks/{task}/status/{status_name}',
+    [TaskController::class, 'updateStatus'])
     ->name('tasks.update.status');
 
 Route::get('tasks/filter/status', static function () {
@@ -40,4 +41,5 @@ Route::get('tasks/filter/id', static function () {
 Route::get('tasks/filter/id/desc', static function () {
     return response(Task::all()->sortByDesc('id'), 200);
 });
-Route::match(['put', 'patch'], 'tasks/{task}/user/{user}', [TaskController::class, 'changeUserToTask']);
+Route::match(['put', 'patch'], 'tasks/{task}/user/{user}',
+    [TaskController::class, 'changeUserToTask']);
