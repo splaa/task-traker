@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<ruleset name="task-traker">
+    <description>PHP CodeSniffer configuration for task-traker</description>
+
+    <!-- Allow test method names with underscores (e.g., test_can_list_tasks) -->
+    <rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
+        <exclude-pattern>*/tests/*</exclude-pattern>
+    </rule>
+
+    <!-- Disable archaic PHPDoc tag requirements in file comments -->
+    <rule ref="PEAR.Commenting.FileComment">
+        <exclude name="PEAR.Commenting.FileComment.MissingCategoryTag"/>
+        <exclude name="PEAR.Commenting.FileComment.MissingAuthorTag"/>
+        <exclude name="PEAR.Commenting.FileComment.MissingLicenseTag"/>
+        <exclude name="PEAR.Commenting.FileComment.MissingLinkTag"/>
+        <exclude name="PEAR.Commenting.FileComment.MissingPackageTag"/>
+    </rule>
+</ruleset>
