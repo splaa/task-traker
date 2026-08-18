@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
  * Rector configuration for automated code refactoring.
  *
- * @author splaa
+ * @author splaa <splaa@users.noreply.github.com>
  */
 
 use Rector\Config\RectorConfig;
