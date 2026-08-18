@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
@@ -20,9 +22,7 @@ use App\Http\Controllers\Auth\VerificationController;
 |
 */
 
-Route::get('/', static function () {
-    return view('welcome');
-});
+Route::get('/', static fn() => view('welcome'));
 
 // Authentication Routes
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -57,6 +57,4 @@ Route::post('email/resend', [VerificationController::class, 'resend'])
     ->name('verification.resend');
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/tasks', static function (){
-    return view('tasks.index');
-})->name('tasks');
+Route::get('/tasks', static fn() => view('tasks.index'))->name('tasks');

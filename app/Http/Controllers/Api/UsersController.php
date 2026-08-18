@@ -13,8 +13,6 @@ class UsersController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return Response
      */
     public function index(): Response
     {
@@ -23,9 +21,6 @@ class UsersController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return Response
      */
     public function store(Request $request): Response
     {
@@ -38,9 +33,6 @@ class UsersController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param User $user
-     * @return Response
      */
     public function show(User $user): Response
     {
@@ -50,10 +42,6 @@ class UsersController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param User $user
-     * @return Response
      */
     public function update(Request $request, User $user): Response
     {
@@ -63,8 +51,6 @@ class UsersController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param User $user
-     * @return Response
      * @throws Exception
      */
     public function destroy(User $user): Response

@@ -88,7 +88,7 @@ class WebRoutesTest extends TestCase
 
     public function test_can_login_with_valid_credentials(): void
     {
-        $user = User::create([
+        User::create([
             'first_name' => 'Login',
             'last_name' => 'Test',
             'email' => 'login@example.com',

@@ -16,8 +16,6 @@ class TaskController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return Response
      */
     public function index(): Response
     {
@@ -28,9 +26,6 @@ class TaskController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param Task $task
-     * @return Response
      */
     public function show(Task $task): Response
     {
@@ -39,9 +34,6 @@ class TaskController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return Response
      */
     public function store(Request $request): Response
     {
@@ -51,10 +43,6 @@ class TaskController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param Task $task
-     * @return Response
      */
     public function update(Request $request, Task $task): Response
     {
@@ -65,8 +53,6 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Task $task
-     * @return Response
      * @throws Exception
      */
     public function destroy(Task $task): Response
@@ -77,7 +63,6 @@ class TaskController extends Controller
 
 
     /**
-     * @param Task $task
      * @param $status_name
      * @return Application|ResponseFactory|Response
      *

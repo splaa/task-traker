@@ -17,9 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::middleware('auth:api')->get('/user', fn(Request $request) => $request->user());
 
 Route::apiResource('tasks', TaskController::class);
 Route::apiResource('users', UsersController::class);
@@ -28,18 +26,10 @@ Route::match(['put', 'patch'], 'tasks/{task}/status/{status_name}',
     [TaskController::class, 'updateStatus'])
     ->name('tasks.update.status');
 
-Route::get('tasks/filter/status', static function () {
-    return response(Task::all()->sortBy('status'), 200);
-});
-Route::get('tasks/filter/status/desc', static function () {
-    return response(Task::all()->sortByDesc('status'), 200);
-});
+Route::get('tasks/filter/status', static fn() => response(Task::all()->sortBy('status'), 200));
+Route::get('tasks/filter/status/desc', static fn() => response(Task::all()->sortByDesc('status'), 200));
 
-Route::get('tasks/filter/id', static function () {
-    return response(Task::all()->sortBy('id'), 200);
-});
-Route::get('tasks/filter/id/desc', static function () {
-    return response(Task::all()->sortByDesc('id'), 200);
-});
+Route::get('tasks/filter/id', static fn() => response(Task::all()->sortBy('id'), 200));
+Route::get('tasks/filter/id/desc', static fn() => response(Task::all()->sortByDesc('id'), 200));
 Route::match(['put', 'patch'], 'tasks/{task}/user/{user}',
     [TaskController::class, 'changeUserToTask']);
