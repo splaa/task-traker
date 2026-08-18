@@ -9,8 +9,20 @@
     color: white;
     border: none;
 }
-.done{
+.done {
     text-decoration: line-through;
+}
+.edit-btn {
+    background: #007bff;
+    border-radius: 4px;
+    color: white;
+    border: none;
+    padding: 2px 8px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+.edit-btn:hover {
+    background: #0056b3;
 }
 
 .lds-spinner {

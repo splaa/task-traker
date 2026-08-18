@@ -4,16 +4,60 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background: rgba(0, 0, 0, .5);
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     padding-top: 5rem;
-  }
+}
 
 .modal-body {
     padding: 2rem;
     width: 400px;
     border-radius: 5px;
     background: #fff;
-    height: 200px;
+    height: auto;
+}
+
+.modal-body .form-group {
+    margin-bottom: 1rem;
+}
+
+.modal-body label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.modal-body input.form-control,
+.modal-body textarea.form-control,
+.modal-body select.form-control {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.modal-footer {
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.modal-footer .btn {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+}
+
+.modal-footer .btn-primary {
+    background: #007bff;
+    color: #fff;
+}
+
+.modal-footer .btn-secondary {
+    background: #6c757d;
+    color: #fff;
 }
