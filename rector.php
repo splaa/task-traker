@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
+
 /**
  * Rector configuration for automated code refactoring.
  *
  * @category Configuration
- * @author splaa <splaa@users.noreply.github.com>
+ * @author splaa <splaa@github.com>
+ * @license  https://opensource.org/licenses/MIT MIT
  */
 
 use Rector\Config\RectorConfig;
