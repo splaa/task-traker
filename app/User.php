@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 /**
+ * User model.
+ *
  * @property mixed user_id
  */
 class User extends Authenticatable
