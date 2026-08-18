@@ -17,7 +17,7 @@ $paths = [
 
 return RectorConfig::configure()
     ->withPaths($paths)
-    ->withPhpSets(php84: true)
+    ->withPhpSets(php85: true)
     ->withPreparedSets(
         deadCode: true,
         codeQuality: true,
