@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 /**
  * Rector configuration for automated code refactoring.
+ *
+ * @author splaa
  */
 
 use Rector\Config\RectorConfig;
