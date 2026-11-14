@@ -7,10 +7,12 @@
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
         "prod": "mix --production",
-        "production": "mix --production"
+        "production": "mix --production",
+        "test:security": "node --test tests/security/*.test.cjs"
     },
     "devDependencies": {
         "@babel/preset-react": "^7.0.0",
+        "@pmmmwh/react-refresh-webpack-plugin": "^0.5.17",
         "axios": "^1.18.0",
         "bootstrap": "^4.0.0",
         "cross-env": "^7.0",
@@ -20,6 +22,7 @@
         "popper.js": "^1.12",
         "react": "^16.2.0",
         "react-dom": "^16.2.0",
+        "react-refresh": "^0.19.0",
         "resolve-url-loader": "^5.0.0",
         "sass": "^1.15.2",
         "sass-loader": "^8.0.0"
@@ -28,6 +31,7 @@
         "prop-types": "^15.7.2"
     },
     "overrides": {
-        "webpackbar": "^7.0.0"
+        "webpackbar": "^7.0.0",
+        "webpack-dev-middleware": "^7.4.6"
     }
 }
