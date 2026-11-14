@@ -3,7 +3,8 @@
 ## Проверка зависимостей и тесты
 
 Для сборки используйте Node 22 (`nvm use`); legacy CLI Laravel Mix 6 не работает
-с Node 26. PHP-тесты запускаются на PHP 8.2 и 8.5 с `pdo_sqlite`.
+с Node 26. CI проверяет PHP 8.2 и 8.5 на SQLite и MySQL 8.0
+(расширения `pdo_sqlite` и `pdo_mysql`).
 Docker/OrbStack для этих проверок не требуется.
 
 ```sh
@@ -23,6 +24,22 @@ npm run production
 middleware, включая запрет чтения файлов вне output-каталога. Тест временно
 открывает сервер только на `127.0.0.1`. PHP-регрессия проверяет, что TokenGuard
 не передаёт нестроковые токены в провайдер пользователей.
+
+По умолчанию PHPUnit использует SQLite в памяти. Для MySQL укажите
+`DB_CONNECTION=mysql`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` и
+`DB_SOCKET` (либо `DB_HOST`/`DB_PORT`) в окружении команды
+`vendor/bin/phpunit --fail-on-skipped`. Используйте только отдельную тестовую
+БД: `RefreshDatabase` пересоздаёт её таблицы. CI создаёт временный MySQL service
+с отдельным пользователем; локально можно запустить отдельный `mysqld` с новым
+datadir, `--no-defaults --skip-networking --mysqlx=OFF` и приватным socket.
+Проверка `MySqlTokenGuardSecurityTest` использует настоящий MySQL-провайдер,
+подтверждает опасное числовое приведение и проверяет отказ TokenGuard.
+На SQLite только эта MySQL-проверка пропускается; MySQL CI запрещает пропуски.
+
+Фикстура default-пользователя явно задаёт ключ из действующего SQL default
+`tasks.user = 1`, не полагаясь на сброс AUTO_INCREMENT после rollback.
+Защита mass assignment моделей не меняется. Проверки сортировки и связи
+задач используют реальные ключи созданных записей.
 
 Override `webpack-dev-middleware` на `^7.4.6` необходим для
 [GHSA-g84c-rxfj-3j2c](https://github.com/webpack/webpack-dev-middleware/security/advisories/GHSA-g84c-rxfj-3j2c):
