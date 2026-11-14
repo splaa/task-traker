@@ -5,23 +5,19 @@ namespace Tests\Feature;
 use App\Task;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Concerns\CreatesDefaultTaskUser;
 use Tests\TestCase;
 
 class TaskApiAdvancedTest extends TestCase
 {
     use RefreshDatabase;
+    use CreatesDefaultTaskUser;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        User::create([
-            'user_id' => 1,
-            'first_name' => 'Default',
-            'last_name' => 'User',
-            'email' => 'default@example.com',
-            'password' => bcrypt('password'),
-        ]);
+        $this->createDefaultTaskUser();
     }
 
     public function test_returns_empty_list_when_no_tasks(): void
@@ -65,13 +61,14 @@ class TaskApiAdvancedTest extends TestCase
 
         $task = Task::create(['title' => 'Reassign', 'description' => 'Will be reassigned']);
         $task = $task->fresh();
-        $this->assertEquals(1, $task->getAttributes()['user']);
+        $this->assertEquals($this->defaultTaskUser->getKey(), $task->getAttributes()['user']);
 
         $response = $this->putJson("/api/tasks/{$task->id}/user/{$user2->user_id}");
 
         $response->assertStatus(200);
         $task->refresh();
         $this->assertEquals($user2->user_id, $task->getAttributes()['user']);
+        $this->assertEquals($user2->getKey(), $task->user()->first()?->getKey());
     }
 
     public function test_update_with_invalid_data_still_succeeds(): void

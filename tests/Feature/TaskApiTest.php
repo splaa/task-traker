@@ -3,25 +3,20 @@
 namespace Tests\Feature;
 
 use App\Task;
-use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Concerns\CreatesDefaultTaskUser;
 use Tests\TestCase;
 
 class TaskApiTest extends TestCase
 {
     use RefreshDatabase;
+    use CreatesDefaultTaskUser;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        User::create([
-            'user_id' => 1,
-            'first_name' => 'Test',
-            'last_name' => 'User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('password'),
-        ]);
+        $this->createDefaultTaskUser();
     }
 
     public function test_can_list_tasks(): void
@@ -162,8 +157,8 @@ class TaskApiTest extends TestCase
 
     public function test_can_filter_tasks_by_id_descending(): void
     {
-        Task::create(['title' => 'First', 'description' => 'First', 'status' => 'View']);
-        Task::create(['title' => 'Second', 'description' => 'Second', 'status' => 'View']);
+        $first = Task::create(['title' => 'First', 'description' => 'First', 'status' => 'View']);
+        $second = Task::create(['title' => 'Second', 'description' => 'Second', 'status' => 'View']);
 
         $response = $this->getJson('/api/tasks/filter/id/desc');
 
@@ -172,7 +167,7 @@ class TaskApiTest extends TestCase
         $this->assertCount(2, $data);
         // First item should have a higher id than the second (descending order)
         $ids = array_column($data, 'id');
-        $this->assertEquals([2, 1], $ids);
+        $this->assertEquals([$second->getKey(), $first->getKey()], $ids);
     }
 
     public function test_returns_404_for_nonexistent_task(): void
